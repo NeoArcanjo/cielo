@@ -62,8 +62,10 @@ defmodule Cielo.Recurrency do
     |> RecurrentTransactionRequestRenewal.changeset(params)
     |> case do
       %Ecto.Changeset{valid?: true} ->
+        IO.inspect(params)
         "sales/"
         |> HTTP.post(params)
+        |> IO.inspect()
 
       error ->
         {:error, Utils.changeset_errors(error)}
