@@ -77,3 +77,23 @@ defmodule Cielo.Entities.RecurrentTransactionRequest do
     |> validate_required([:merchant_order_id, :customer, :payment])
   end
 end
+
+defmodule Cielo.Entities.RecurrentTransactionRequestRenewal do
+  use Cielo.Entities.Base
+  alias Cielo.Entities
+
+  embedded_schema do
+    field(:merchant_order_id, :string)
+
+    embeds_one(:customer, Entities.Customer)
+    embeds_one(:payment, Entities.RecurrentPaymentRenewal)
+  end
+
+  def changeset(bankslip_transaction_request, attrs) do
+    bankslip_transaction_request
+    |> cast(attrs, [:merchant_order_id])
+    |> cast_embed(:customer)
+    |> cast_embed(:payment)
+    |> validate_required([:merchant_order_id, :customer, :payment])
+  end
+end

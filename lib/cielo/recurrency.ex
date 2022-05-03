@@ -4,7 +4,7 @@ defmodule Cielo.Recurrency do
   """
 
   alias Cielo.{HTTP, Utils}
-  alias Cielo.Entities.{RecurrentTransactionRequest, RecurrentPaymentUpdate}
+  alias Cielo.Entities.{RecurrentTransactionRequest, RecurrentTransactionRequestRenewal, RecurrentPaymentUpdate}
 
   @type http_response :: {:error, any} | {:error, any, any} | {:ok, any}
 
@@ -39,10 +39,22 @@ defmodule Cielo.Recurrency do
   """
   @spec create_payment(map) :: http_response
   def create_payment(params) do
-    IO.inspect(params)
     %RecurrentTransactionRequest{}
     |> RecurrentTransactionRequest.changeset(params)
-    |> IO.inspect()
+    |> case do
+      %Ecto.Changeset{valid?: true} ->
+        "sales/"
+        |> HTTP.post(params)
+
+      error ->
+        {:error, Utils.changeset_errors(error)}
+    end
+  end
+
+  @spec create_renewal_payment(map) :: http_response
+  def create_renewal_payment(params) do
+    %RecurrentTransactionRequestRenewal{}
+    |> RecurrentTransactionRequestRenewal.changeset(params)
     |> case do
       %Ecto.Changeset{valid?: true} ->
         "sales/"

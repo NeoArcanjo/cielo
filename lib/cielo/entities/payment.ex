@@ -59,6 +59,35 @@ defmodule Cielo.Entities.RecurrentPaymentUpdate do
   end
 end
 
+defmodule Cielo.Entities.RecurrentPaymentRenewal do
+  use Cielo.Entities.Base
+  alias Cielo.Entities
+
+  embedded_schema do
+    field(:amount, :integer)
+    field(:installments, :integer)
+    field(:soft_descriptor, :string)
+    field(:currency, :string)
+    field(:type, :string)
+
+    embeds_one(:recurrent_payment, Entities.Recurrent)
+    embeds_one(:credit_card, Entities.CreditCardWithoutCVV)
+  end
+
+  def changeset(payment, attrs) do
+    payment
+    |> cast(attrs, [
+      :amount,
+      :installments,
+      :soft_descriptor,
+      :type
+    ])
+    |> cast_embed(:recurrent_payment)
+    |> cast_embed(:credit_card)
+    |> validate_required([:amount, :installments, :credit_card, :recurrent_payment, :type])
+  end
+end
+
 defmodule Cielo.Entities.RecurrentPayment do
   use Cielo.Entities.Base
   alias Cielo.Entities
