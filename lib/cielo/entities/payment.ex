@@ -70,7 +70,7 @@ defmodule Cielo.Entities.RecurrentPaymentRenewal do
     field(:type, :string)
 
     embeds_one(:recurrent_payment, Entities.Recurrent)
-    embeds_one(:credit_card, Entities.CreditCardWithoutCVV)
+    embeds_one(:credit_card, Entities.CreditCardReneval)
   end
 
   def changeset(payment, attrs) do
