@@ -4,7 +4,12 @@ defmodule Cielo.Recurrency do
   """
 
   alias Cielo.{HTTP, Utils}
-  alias Cielo.Entities.{RecurrentTransactionRequest, RecurrentTransactionRequestRenewal, RecurrentPaymentUpdate}
+
+  alias Cielo.Entities.{
+    RecurrentTransactionRequest,
+    RecurrentTransactionRequestRenewal,
+    RecurrentPaymentUpdate
+  }
 
   @type http_response :: {:error, any} | {:error, any, any} | {:ok, any}
 
@@ -51,8 +56,8 @@ defmodule Cielo.Recurrency do
     end
   end
 
-  @spec create_renewal_payment(map) :: http_response
-  def create_renewal_payment(params) do
+  @spec create_payment_renewal(map) :: http_response
+  def create_payment_renewal(params) do
     %RecurrentTransactionRequestRenewal{}
     |> RecurrentTransactionRequestRenewal.changeset(params)
     |> case do
@@ -99,7 +104,6 @@ defmodule Cielo.Recurrency do
     end
   end
 
-
   @doc """
   Update a recurrent payment end date.
 
@@ -128,16 +132,18 @@ defmodule Cielo.Recurrency do
   @spec update_end_date(binary, binary) :: http_response()
   def update_end_date(recurrent_payment_id, new_date) when is_binary(new_date) do
     with {:ok, _date} <- Date.from_iso8601(new_date),
-         {:ok, _} = response <- common_update_text(@update_enddate_endpoint, recurrent_payment_id, new_date) do
+         {:ok, _} = response <-
+           common_update_text(@update_enddate_endpoint, recurrent_payment_id, new_date) do
       response
-
     else
       error_tuple ->
         error_tuple
     end
   end
 
-  def update_end_date(recurrent_payment_id, %Date{} = date), do: update_end_date(recurrent_payment_id, Date.to_string(date))
+  def update_end_date(recurrent_payment_id, %Date{} = date),
+    do: update_end_date(recurrent_payment_id, Date.to_string(date))
+
   def update_end_date(_recurrent_payment_id, _date), do: {:error, :invalid_parameters}
 
   @doc """
@@ -169,16 +175,18 @@ defmodule Cielo.Recurrency do
   @spec update_next_charge_date(binary, binary) :: http_response()
   def update_next_charge_date(recurrent_payment_id, new_date) when is_binary(new_date) do
     with {:ok, _date} <- Date.from_iso8601(new_date),
-         {:ok, _} = response <- common_update_text(@update_next_charge_date_endpoint, recurrent_payment_id, new_date) do
+         {:ok, _} = response <-
+           common_update_text(@update_next_charge_date_endpoint, recurrent_payment_id, new_date) do
       response
-
     else
       error_tuple ->
         error_tuple
     end
   end
 
-  def update_next_charge_date(recurrent_payment_id, %Date{} = date), do: update_next_charge_date(recurrent_payment_id, Date.to_string(date))
+  def update_next_charge_date(recurrent_payment_id, %Date{} = date),
+    do: update_next_charge_date(recurrent_payment_id, Date.to_string(date))
+
   def update_next_charge_date(_recurrent_payment_id, _date), do: {:error, :invalid_parameters}
 
   @doc """
@@ -215,7 +223,8 @@ defmodule Cielo.Recurrency do
     common_update_text(@update_interval_endpoint, recurrent_payment_id, interval)
   end
 
-  def update_interval(recurrent_payment_id, interval) when is_atom(interval) and interval in @valid_intervals do
+  def update_interval(recurrent_payment_id, interval)
+      when is_atom(interval) and interval in @valid_intervals do
     update_interval(recurrent_payment_id, Utils.parse_interval(interval))
   end
 
@@ -314,7 +323,7 @@ defmodule Cielo.Recurrency do
     if Utils.valid_guid?(recurrent_payment_id) do
       endpoint
       |> HTTP.build_path(":payment_id", "#{recurrent_payment_id}")
-      |> HTTP.put(value, [request_format: :text])
+      |> HTTP.put(value, request_format: :text)
       |> Utils.format_update_response(default_message)
     else
       {:error, :invalid_uuid}

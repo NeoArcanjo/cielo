@@ -167,6 +167,7 @@ defmodule Cielo.Utils do
 
   @doc false
   def format_update_response(tuple, default_message \\ :updated)
+
   def format_update_response({:ok, response}, default_message) when response == "" do
     {:ok, default_message}
   end
@@ -178,7 +179,6 @@ defmodule Cielo.Utils do
   def parse_interval(:quarterly), do: 3
   def parse_interval(:semi_annual), do: 6
   def parse_interval(:annual), do: 12
-
 
   defp convert_map_key(key, :atom) when is_atom(key), do: key
 

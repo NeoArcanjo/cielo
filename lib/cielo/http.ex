@@ -275,7 +275,7 @@ defmodule Cielo.HTTP do
   defp is_sandbox?(false), do: :production
   defp is_sandbox?(true), do: :sandbox
 
-    defp emit_start(method, path) do
+  defp emit_start(method, path) do
     :telemetry.execute(
       [:cielo, :request, :start],
       %{system_time: System.system_time()},

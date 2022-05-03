@@ -354,13 +354,13 @@ defmodule Cielo.Transaction do
   @spec capture(binary(), map()) :: {:error, any} | {:error, any, any} | {:ok, map}
   def capture(payment_id, params) when is_binary(payment_id) and is_map(params) do
     case Utils.valid_guid?(payment_id) do
-      :true ->
+      true ->
         @capture_endpoint
         |> HTTP.build_path(":payment_id", "#{payment_id}")
         |> HTTP.encode_url_args(params)
         |> HTTP.put()
 
-      :false ->
+      false ->
         {:error, "Not valid GUID"}
     end
   end
@@ -404,12 +404,12 @@ defmodule Cielo.Transaction do
   @spec capture(binary()) :: {:error, any} | {:error, any, any} | {:ok, map}
   def capture(payment_id) when is_binary(payment_id) do
     case Utils.valid_guid?(payment_id) do
-      :true ->
+      true ->
         @capture_endpoint
         |> HTTP.build_path(":payment_id", "#{payment_id}")
         |> HTTP.put()
 
-      :false ->
+      false ->
         {:error, "Invalid GUID"}
     end
   end
@@ -430,12 +430,12 @@ defmodule Cielo.Transaction do
   @spec deactivate_recurrent_payment(binary()) :: {:error, any} | {:error, any, any} | {:ok, any}
   def deactivate_recurrent_payment(recurrent_payment_id) do
     case Utils.valid_guid?(recurrent_payment_id) do
-      :true ->
+      true ->
         @deactivate_recurrent_payment_endpoint
         |> HTTP.build_path(":payment_id", "#{recurrent_payment_id}")
         |> HTTP.put()
 
-      :false ->
+      false ->
         {:error, "Invalid GUID"}
     end
   end
@@ -466,13 +466,13 @@ defmodule Cielo.Transaction do
   @spec cancel_payment(binary(), non_neg_integer()) :: {:error, any} | {:ok, map}
   def cancel_payment(payment_id, amount) do
     case Utils.valid_guid?(payment_id) do
-      :true ->
+      true ->
         @cancel_partial_endpoint
         |> HTTP.build_path(":payment_id", "#{payment_id}")
         |> HTTP.build_path(":amount", "#{amount}")
         |> HTTP.put()
 
-      :false ->
+      false ->
         {:error, "Invalid GUID"}
     end
   end
@@ -503,12 +503,12 @@ defmodule Cielo.Transaction do
   @spec cancel_payment(binary()) :: {:error, any} | {:ok, map}
   def cancel_payment(payment_id) do
     case Utils.valid_guid?(payment_id) do
-      :true ->
+      true ->
         @cancel_endpoint
         |> HTTP.build_path(":payment_id", "#{payment_id}")
         |> HTTP.put()
 
-      :false ->
+      false ->
         {:error, "Invalid GUID"}
     end
   end

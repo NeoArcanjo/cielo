@@ -18,6 +18,7 @@ defmodule Cielo do
   defdelegate recurrent_payment_consult(recurrent_payment_id),
     to: Cielo.Consultation,
     as: :recurrent_payment
+
   defdelegate zero_auth_consult(params),
     to: Cielo.Consultation,
     as: :zero_auth
@@ -26,12 +27,20 @@ defmodule Cielo do
   defdelegate debit_transaction(params), to: Cielo.Transaction, as: :debit
   defdelegate bankslip_transaction(params), to: Cielo.Transaction, as: :bankslip
   defdelegate recurrent_transaction(params), to: Cielo.Recurrency, as: :create_payment
+
+  defdelegate recurrent_transaction_renewal(params),
+    to: Cielo.Recurrency,
+    as: :create_payment_renewal
+
   defdelegate capture(payment_id, params), to: Cielo.Transaction, as: :capture
   defdelegate capture(payment_id), to: Cielo.Transaction, as: :capture
 
   defdelegate deactivate_recurrent(recurrent_payment_id), to: Cielo.Recurrency, as: :deactivate
   defdelegate reactivate_recurrent(recurrent_payment_id), to: Cielo.Recurrency, as: :reactivate
-  defdelegate update_recurrent(recurrent_payment_id, params), to: Cielo.Recurrency, as: :update_payment_data
+
+  defdelegate update_recurrent(recurrent_payment_id, params),
+    to: Cielo.Recurrency,
+    as: :update_payment_data
 
   defdelegate create_token(params), to: Cielo.Token, as: :create_token
   defdelegate get_card(token), to: Cielo.Token, as: :get_card

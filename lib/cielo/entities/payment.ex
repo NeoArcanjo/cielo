@@ -26,7 +26,6 @@ defmodule Cielo.Entities.CreditCardPayment do
   end
 end
 
-
 defmodule Cielo.Entities.RecurrentPaymentUpdate do
   use Cielo.Entities.Base
   alias Cielo.Entities
