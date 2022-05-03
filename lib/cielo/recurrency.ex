@@ -39,8 +39,10 @@ defmodule Cielo.Recurrency do
   """
   @spec create_payment(map) :: http_response
   def create_payment(params) do
+    IO.inspect(params)
     %RecurrentTransactionRequest{}
     |> RecurrentTransactionRequest.changeset(params)
+    |> IO.inspect()
     |> case do
       %Ecto.Changeset{valid?: true} ->
         "sales/"
